@@ -1,9 +1,12 @@
-package com.qa.mysql;
+package com.qa.database;
 
+import java.awt.Button;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JDBC {
 	
