@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -21,9 +22,9 @@ public class Withdraw extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField amount;
-	private JTextField textField_1;
-	private Connection connection;
-	private Statement statement;
+	private JTextField infoField;
+	private static Connection connection;
+	private static Statement statement;
 	private static int account = 0;
 
 	/**
@@ -32,7 +33,7 @@ public class Withdraw extends JFrame {
 	 * @param connection 
 	 * @param lastAcc 
 	 */
-	public Withdraw(JFrame main, Connection connection, Statement statement, int lastAcc) {
+	public Withdraw(JFrame main, Connection connection2, Statement statement2, int lastAcc) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 335, 157);
 		contentPane = new JPanel();
@@ -45,8 +46,8 @@ public class Withdraw extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		this.connection = connection;
-		this.statement = statement;
+		connection = connection2;
+		statement = statement2;
 		account = lastAcc;
 		
 		JLabel label = new JLabel("Amount:");
@@ -67,13 +68,13 @@ public class Withdraw extends JFrame {
 		gbc_amount.gridy = 0;
 		contentPane.add(amount, gbc_amount);
 		
-		JLabel label_1 = new JLabel("Balance:");
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.anchor = GridBagConstraints.EAST;
-		gbc_label_1.insets = new Insets(0, 0, 5, 5);
-		gbc_label_1.gridx = 0;
-		gbc_label_1.gridy = 1;
-		contentPane.add(label_1, gbc_label_1);
+		JLabel info = new JLabel("Info:");
+		GridBagConstraints gbc_info = new GridBagConstraints();
+		gbc_info.anchor = GridBagConstraints.EAST;
+		gbc_info.insets = new Insets(0, 0, 5, 5);
+		gbc_info.gridx = 0;
+		gbc_info.gridy = 1;
+		contentPane.add(info, gbc_info);
 		
 		JButton button = new JButton("Back");
 		button.addActionListener(new ActionListener() {
@@ -83,16 +84,16 @@ public class Withdraw extends JFrame {
 			}
 		});
 		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.anchor = GridBagConstraints.NORTH;
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_1.gridx = 1;
-		gbc_textField_1.gridy = 1;
-		contentPane.add(textField_1, gbc_textField_1);
+		infoField = new JTextField();
+		infoField.setEditable(false);
+		infoField.setColumns(10);
+		GridBagConstraints gbc_infoField = new GridBagConstraints();
+		gbc_infoField.anchor = GridBagConstraints.NORTH;
+		gbc_infoField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_infoField.insets = new Insets(0, 0, 5, 0);
+		gbc_infoField.gridx = 1;
+		gbc_infoField.gridy = 1;
+		contentPane.add(infoField, gbc_infoField);
 		GridBagConstraints gbc_button = new GridBagConstraints();
 		gbc_button.anchor = GridBagConstraints.NORTHWEST;
 		gbc_button.insets = new Insets(0, 0, 0, 5);
@@ -116,8 +117,31 @@ public class Withdraw extends JFrame {
 	}
 	
 	private void withdraw() {
+		ResultSet depo;
+		ResultSet with;
 		try {
-			statement.execute("INSERT INTO `banking`.`withdrawals` (`AccountNumber`, `Amount`, `Date`) VALUES ('"+account+"', '"+amount.getText()+"', '"+genDate()+"')");
+			int deposit = 0;
+			int withdraw = 0;
+			depo = statement.executeQuery("SELECT sum(Amount) as deposit FROM banking.deposits where AccountNumber = "+account);
+			depo.next();
+			deposit = depo.getInt("deposit");
+			depo.close();
+			
+			with = statement.executeQuery("SELECT sum(Amount) as withdraw FROM banking.withdrawals where AccountNumber = "+account);
+			with.next();
+			withdraw = with.getInt("withdraw");
+			with.close();
+			
+			if (deposit-(withdraw+Integer.parseInt(amount.getText()))>0)
+			{
+				infoField.setText("Transaction Succeeded!");
+				statement.execute("INSERT INTO `banking`.`withdrawals` (`AccountNumber`, `Amount`, `Date`) VALUES ('"+account+"', '"+amount.getText()+"', '"+genDate()+"')");
+			}
+			else
+			{
+				infoField.setText("Insufficient Balance!");
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

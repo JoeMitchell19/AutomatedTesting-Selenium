@@ -23,7 +23,7 @@ public class DepositMoney extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField amount;
-	private JTextField balance;
+	private JTextField infoField;
 	private Connection connection = null;
 	private Statement statement = null;
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -81,24 +81,24 @@ public class DepositMoney extends JFrame {
 		gbc_amount.gridy = 0;
 		contentPane.add(amount, gbc_amount);
 		
-		JLabel label_1 = new JLabel("Balance:");
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.anchor = GridBagConstraints.EAST;
-		gbc_label_1.insets = new Insets(0, 0, 5, 5);
-		gbc_label_1.gridx = 0;
-		gbc_label_1.gridy = 1;
-		contentPane.add(label_1, gbc_label_1);
+		JLabel info = new JLabel("Info:");
+		GridBagConstraints gbc_info = new GridBagConstraints();
+		gbc_info.anchor = GridBagConstraints.EAST;
+		gbc_info.insets = new Insets(0, 0, 5, 5);
+		gbc_info.gridx = 0;
+		gbc_info.gridy = 1;
+		contentPane.add(info, gbc_info);
 		
-		balance = new JTextField();
-		balance.setEditable(false);
-		balance.setColumns(10);
-		GridBagConstraints gbc_balance = new GridBagConstraints();
-		gbc_balance.anchor = GridBagConstraints.NORTH;
-		gbc_balance.fill = GridBagConstraints.HORIZONTAL;
-		gbc_balance.insets = new Insets(0, 0, 5, 0);
-		gbc_balance.gridx = 1;
-		gbc_balance.gridy = 1;
-		contentPane.add(balance, gbc_balance);
+		infoField = new JTextField();
+		infoField.setEditable(false);
+		infoField.setColumns(10);
+		GridBagConstraints gbc_infoField = new GridBagConstraints();
+		gbc_infoField.anchor = GridBagConstraints.NORTH;
+		gbc_infoField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_infoField.insets = new Insets(0, 0, 5, 0);
+		gbc_infoField.gridx = 1;
+		gbc_infoField.gridy = 1;
+		contentPane.add(infoField, gbc_infoField);
 		
 		JButton depositButton = new JButton("Deposit");
 		depositButton.addActionListener(new ActionListener() {
@@ -136,8 +136,10 @@ public class DepositMoney extends JFrame {
 	
 	private void Deposit() {
 		try {
+			infoField.setText("Transaction Succeeded!");
 			statement.execute("INSERT INTO `banking`.`deposits` (`AccountNumber`, `Amount`, `Date`) VALUES ('"+account+"', '"+amount.getText()+"', '"+genDate()+"')");
 		} catch (SQLException e) {
+			infoField.setText("Transaction Failed!");
 			e.printStackTrace();
 		}
 	}
