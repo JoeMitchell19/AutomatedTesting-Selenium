@@ -77,7 +77,6 @@ public class CreateAccount extends JFrame {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(a);
 		return a;
 	}
 

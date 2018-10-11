@@ -134,12 +134,12 @@ public class Withdraw extends JFrame {
 			
 			if (deposit-(withdraw+Integer.parseInt(amount.getText()))>0)
 			{
-				infoField.setText("Transaction Succeeded!");
+				infoField.setText("Transaction Succeeded! ID: "+account);
 				statement.execute("INSERT INTO `banking`.`withdrawals` (`AccountNumber`, `Amount`, `Date`) VALUES ('"+account+"', '"+amount.getText()+"', '"+genDate()+"')");
 			}
 			else
 			{
-				infoField.setText("Insufficient Balance!");
+				infoField.setText("Insufficient Balance! ID: "+account);
 			}
 			
 		} catch (SQLException e) {

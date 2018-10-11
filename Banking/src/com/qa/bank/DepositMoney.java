@@ -136,10 +136,10 @@ public class DepositMoney extends JFrame {
 	
 	private void Deposit() {
 		try {
-			infoField.setText("Transaction Succeeded!");
+			infoField.setText("Transaction Succeeded! ID: "+account);
 			statement.execute("INSERT INTO `banking`.`deposits` (`AccountNumber`, `Amount`, `Date`) VALUES ('"+account+"', '"+amount.getText()+"', '"+genDate()+"')");
 		} catch (SQLException e) {
-			infoField.setText("Transaction Failed!");
+			infoField.setText("Transaction Failed! ID: "+account);
 			e.printStackTrace();
 		}
 	}
