@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookmarks>
+   <site url="http://download.eclipse.org/windowbuilder/latest/" selected="true" name="org.eclipse.wb.releng.updatesite"/>
+   <site url="http://download.eclipse.org/releases/oxygen" selected="true" name="Oxygen"/>
+   <site url="http://download.eclipse.org/eclipse/updates/4.7" selected="true" name="The Eclipse Project Updates"/>
+   <site url="http://www.genuitec.com/updates/webclipse/oxygen/" selected="true" name="Webclipse CI Update Site"/>
+</bookmarks>
