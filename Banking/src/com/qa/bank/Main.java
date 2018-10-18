@@ -161,7 +161,7 @@ public class Main extends JFrame {
 				
 				System.out.println(id);
 				
-				if(retrieveAccID.getText().equals(""))
+				if(id==0)
 				{
 					retrieveAcc(account, false);
 				}
